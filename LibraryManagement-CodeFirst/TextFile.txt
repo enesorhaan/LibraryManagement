@@ -1,0 +1,23 @@
+﻿Students
+
+Books
+
+Authors
+
+BookTypes
+
+Operations
+
+----------------
+
+one-to-many
+
+Books - Authors
+
+Books - BookTypes
+
+-----------------
+
+many-to-many
+
+Students - Books
