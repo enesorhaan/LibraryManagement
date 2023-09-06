@@ -6,6 +6,7 @@ namespace LibraryManagement_CodeFirst.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string FullName { get { return $"{FirstName} {LastName}"; } }
 
         // Relational Property
 
