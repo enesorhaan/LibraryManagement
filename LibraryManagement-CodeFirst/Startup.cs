@@ -3,6 +3,7 @@ using LibraryManagement_CodeFirst.Models;
 using LibraryManagement_CodeFirst.RepositoryPattern.Base;
 using LibraryManagement_CodeFirst.RepositoryPattern.Concrete;
 using LibraryManagement_CodeFirst.RepositoryPattern.Interfaces;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -34,6 +35,15 @@ namespace LibraryManagement_CodeFirst
             //services.AddScoped<IRepository<Author>, Repository<Author>>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {
+                options.LoginPath = "/Auth/Login";
+                options.Cookie.Name = "UserDetail";
+                options.AccessDeniedPath = "/Auth/Login";
+            });
+            services.AddAuthorization(options => {
+                options.AddPolicy("AdminPolicy", policy => policy.RequireClaim("role", "admin"));
+                options.AddPolicy("UserPolicy", policy => policy.RequireClaim("role", "admin", "user"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,7 +57,8 @@ namespace LibraryManagement_CodeFirst
 
             app.UseStaticFiles();
             app.UseRouting();
-
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

@@ -2,6 +2,7 @@
 using LibraryManagement_CodeFirst.Dto;
 using LibraryManagement_CodeFirst.Models;
 using LibraryManagement_CodeFirst.RepositoryPattern.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,6 +12,7 @@ using System.Linq;
 namespace LibraryManagement_CodeFirst.Areas.Management.Controllers
 {
     [Area("Management")]
+    [Authorize(Policy = "AdminPolicy")]
     public class BookController : Controller
     {
         MyDbContext _db;

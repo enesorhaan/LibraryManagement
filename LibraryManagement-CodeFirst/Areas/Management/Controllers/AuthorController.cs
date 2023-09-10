@@ -1,11 +1,13 @@
 ﻿using LibraryManagement_CodeFirst.Models;
 using LibraryManagement_CodeFirst.RepositoryPattern.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace LibraryManagement_CodeFirst.Areas.Management.Controllers
 {
     [Area("Management")]
+    [Authorize(Policy = "AdminPolicy")]
     public class AuthorController : Controller
     {
         IAuthorRepository _repoAuthor;

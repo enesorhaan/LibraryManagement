@@ -2,6 +2,7 @@
 using LibraryManagement_CodeFirst.Models;
 using LibraryManagement_CodeFirst.RepositoryPattern.Concrete;
 using LibraryManagement_CodeFirst.RepositoryPattern.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Linq;
 namespace LibraryManagement_CodeFirst.Areas.Management.Controllers
 {
     [Area("Management")]
+    [Authorize(Policy = "AdminPolicy")]
     public class BookTypeController : Controller
     {
         IBookTypeRepository _repoBookType;
