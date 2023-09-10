@@ -1,5 +1,7 @@
 ﻿using LibraryManagement_CodeFirst.Context;
 using LibraryManagement_CodeFirst.Models;
+using LibraryManagement_CodeFirst.RepositoryPattern.Concrete;
+using LibraryManagement_CodeFirst.RepositoryPattern.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,14 +11,15 @@ namespace LibraryManagement_CodeFirst.Controllers
 {
     public class BookTypeController : Controller
     {
-        MyDbContext _db;
-        public BookTypeController(MyDbContext db)
+        IBookTypeRepository _repoBookType;
+        public BookTypeController(IBookTypeRepository repoBookType)
         {
-            _db = db;
+            _repoBookType = repoBookType;
         }
+
         public IActionResult BookTypeList()
         {
-            List<BookType> bookTypes = _db.BookTypes.ToList();
+            List<BookType> bookTypes = _repoBookType.GetAll();
             return View(bookTypes);
         }
 
@@ -27,32 +30,26 @@ namespace LibraryManagement_CodeFirst.Controllers
         [HttpPost]
         public IActionResult Create(BookType bookType)
         {
-            _db.BookTypes.Add(bookType);
-            _db.SaveChanges();
+            _repoBookType.Add(bookType);
             return RedirectToAction("BookTypeList");
         }
 
         public IActionResult Edit(int id) 
         {
-            BookType bookType = _db.BookTypes.Find(id);
+            BookType bookType = _repoBookType.GetById(id);
             return View(bookType); 
         }
 
         [HttpPost]
         public IActionResult Edit(BookType bookType)
         {
-            bookType.Status = Enums.DataStatus.Updated;
-            bookType.ModifiedDate = DateTime.Now;
-            _db.BookTypes.Update(bookType);
-            _db.SaveChanges();
+            _repoBookType.Update(bookType);
             return RedirectToAction("BookTypeList");
         }
 
         public IActionResult HardDelete (int id)
         {
-            BookType bookType = _db.BookTypes.Find(id);
-            _db.BookTypes.Remove(bookType);
-            _db.SaveChanges();
+            _repoBookType.SpecialDelete(id);
             return RedirectToAction("BookTypeList");
         }
     }

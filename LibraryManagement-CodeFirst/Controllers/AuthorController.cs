@@ -1,5 +1,6 @@
 ﻿using LibraryManagement_CodeFirst.Context;
 using LibraryManagement_CodeFirst.Models;
+using LibraryManagement_CodeFirst.RepositoryPattern.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,15 +10,16 @@ namespace LibraryManagement_CodeFirst.Controllers
 {
     public class AuthorController : Controller
     {
-        MyDbContext _db;
-        public AuthorController(MyDbContext db)
+        IAuthorRepository _repoAuthor;
+        public AuthorController(IAuthorRepository repoAuthor)
         {
-            _db = db;
+            _repoAuthor = repoAuthor;
         }
         public IActionResult AuthorList()
         {
             //List<Author> authors = _db.Authors.ToList();
-            List<Author> authors = _db.Authors.Where(a => a.Status != Enums.DataStatus.Deleted).ToList();
+            //List<Author> authors = _db.Authors.Where(a => a.Status != Enums.DataStatus.Deleted).ToList(); //without generic repo
+            List<Author> authors = _repoAuthor.GetActives();
             return View(authors);
         }
 
@@ -28,33 +30,25 @@ namespace LibraryManagement_CodeFirst.Controllers
         [HttpPost]
         public IActionResult Create(Author author)
         {
-            _db.Authors.Add(author);
-            _db.SaveChanges();
+            _repoAuthor.Add(author);
             return RedirectToAction("Authorlist");
         }
 
         public IActionResult Edit(int id)
         {
-            Author author = _db.Authors.Find(id);
+            Author author = _repoAuthor.GetById(id);
             return View(author);
         }
         [HttpPost]
         public IActionResult Edit(Author author)
         {
-            author.Status = Enums.DataStatus.Updated;
-            author.ModifiedDate = DateTime.Now;
-            _db.Authors.Update(author);
-            _db.SaveChanges();
+            _repoAuthor.Update(author);
             return RedirectToAction("AuthorList");
         }
 
         public IActionResult Delete(int id)
         {
-            Author author = _db.Authors.Find(id);
-            author.Status = Enums.DataStatus.Deleted;
-            author.ModifiedDate = DateTime.Now;
-            _db.Authors.Update(author);
-            _db.SaveChanges();
+            _repoAuthor.Delete(id);
             return RedirectToAction("AuthorList");
         }
     }

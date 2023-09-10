@@ -1,4 +1,8 @@
 using LibraryManagement_CodeFirst.Context;
+using LibraryManagement_CodeFirst.Models;
+using LibraryManagement_CodeFirst.RepositoryPattern.Base;
+using LibraryManagement_CodeFirst.RepositoryPattern.Concrete;
+using LibraryManagement_CodeFirst.RepositoryPattern.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -24,6 +28,11 @@ namespace LibraryManagement_CodeFirst
         {
             services.AddDbContext<MyDbContext>(options => options.UseSqlServer(_configuration["ConnectionStrings:MsSql"]));
             services.AddControllersWithViews();
+            //services.AddScoped<IRepository<BookType>, Repository<BookType>>();
+            services.AddScoped<IBookTypeRepository, BookTypeRepository>();
+            //services.AddScoped<IRepository<Author>, Repository<Author>>();
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<IBookRepository, BookRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
