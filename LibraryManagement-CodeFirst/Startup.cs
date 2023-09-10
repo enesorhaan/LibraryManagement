@@ -30,24 +30,34 @@ namespace LibraryManagement_CodeFirst
             services.AddControllersWithViews();
             //services.AddScoped<IRepository<BookType>, Repository<BookType>>();
             services.AddScoped<IBookTypeRepository, BookTypeRepository>();
+            services.AddScoped<IRepository<AppUser>, Repository<AppUser>>();
             //services.AddScoped<IRepository<Author>, Repository<Author>>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MyDbContext context)
         {
+            context.Database.Migrate();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllerRoute(
+                    name: "DefaultArea",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+                endpoints.MapControllerRoute(
+                    name:"Default",
+                    pattern:"{controller=Auth}/{action=Login}/{id?}"
+                );
             });
         }
     }

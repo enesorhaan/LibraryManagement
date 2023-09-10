@@ -1,4 +1,5 @@
 ﻿using LibraryManagement_CodeFirst.Configurations;
+using LibraryManagement_CodeFirst.Initializer;
 using LibraryManagement_CodeFirst.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ namespace LibraryManagement_CodeFirst.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            DataInitializer.Seed(modelBuilder);
             modelBuilder.ApplyConfiguration(new OperationConfiguration());
             modelBuilder.ApplyConfiguration(new AuthorConfiguration());
             modelBuilder.ApplyConfiguration(new StudentConfiguration());
@@ -24,5 +26,6 @@ namespace LibraryManagement_CodeFirst.Context
         public DbSet<Author> Authors { get; set; }
         public DbSet<BookType> BookTypes { get; set; }
         public DbSet<Operation> Operations { get; set; }
+        public DbSet<AppUser> Users { get; set; }
     }
 }
