@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using LibraryManagement_CodeFirst.Context;
 using LibraryManagement_CodeFirst.Models;
 using LibraryManagement_CodeFirst.RepositoryPattern.Base;
@@ -28,7 +29,7 @@ namespace LibraryManagement_CodeFirst
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<MyDbContext>(options => options.UseSqlServer(_configuration["ConnectionStrings:MsSql"]));
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
             //services.AddScoped<IRepository<BookType>, Repository<BookType>>();
             services.AddScoped<IBookTypeRepository, BookTypeRepository>();
             services.AddScoped<IRepository<AppUser>, Repository<AppUser>>();

@@ -25,9 +25,14 @@ namespace LibraryManagement_CodeFirst.Areas.Management.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult Create(Author author)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(author);
+            }
             _repoAuthor.Add(author);
             return RedirectToAction("Authorlist", "Author", new { area = "Management" });
         }

@@ -33,6 +33,10 @@ namespace LibraryManagement_CodeFirst.Areas.Management.Controllers
         [HttpPost]
         public IActionResult Create(BookType bookType)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(bookType);
+            }
             _repoBookType.Add(bookType);
             return RedirectToAction("BookTypeList", "BookType", new { area = "Management"});
         }

@@ -5,7 +5,7 @@ namespace LibraryManagement_CodeFirst.Models
     public class Book : BaseEntity
     {
         public string Name { get; set; }
-        public int PageCount { get; set; }
+        public string PageCount { get; set; }
         public int AuthorID { get; set; }
         public int BookTypeID { get; set; }
 
